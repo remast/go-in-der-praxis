@@ -14,14 +14,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "reveal-plantuml": "^1.0.2",
-    "reveal-run-in-terminal": "^1.0.4",
-    "reveal.js": "^5.0.2"
+    "reveal-run-in-terminal": "^1.0.5",
+    "reveal.js": "^5.0.5"
   },
   "devDependencies": {
-    "browser-sync": "^3.0.0",
+    "browser-sync": "^3.0.2",
     "copyfiles": "^2.4.1",
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.4.1"
   }
 }
