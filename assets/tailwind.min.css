@@ -568,6 +568,22 @@ video {
   grid-column: span 9 / span 9;
 }
 
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.mb-24 {
+  margin-bottom: 6rem;
+}
+
+.mt-24 {
+  margin-top: 6rem;
+}
+
+.mb-32 {
+  margin-bottom: 8rem;
+}
+
 .box-content {
   box-sizing: content-box;
 }
