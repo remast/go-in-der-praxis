@@ -302,189 +302,189 @@
                         Reflection is never clear.
                     </code></pre>
         </section>
-      </section>
-      <section>
-        <h2>Flag für Count</h2>
-        <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9,16|15,18|">
-                  import (
-                      "flag"
-                      "fmt"
-                      "github.com/jboursiquot/go-proverbs"
-                  )
-                  
-                  func main() {
-                      // 1a. Flags definieren
-                      count := flag.Int("count", 1, "proverb count")
-                  
-                      // 1b. Flags parsen
-                      flag.Parse()
-                  
-                      // 2. Ausgabe in Schleife
-                      for range *count {
-                          p := proverbs.Random()
-                          fmt.Println(p.Saying)
-                      }                        
-                  }                        
-              </code></pre>
-        <pre><code data-trim data-noescape class="clean">
-                  // Compile mit `go build .`, Ausgabe mit `pro -count=2`
-                  Make the zero value useful.
-                  Reflection is never clear.
-              </code></pre>
-      </section>
+        <section>
+          <h2>Flag für Count</h2>
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9,16|15,18|">
+                    import (
+                        "flag"
+                        "fmt"
+                        "github.com/jboursiquot/go-proverbs"
+                    )
+                    
+                    func main() {
+                        // 1a. Flags definieren
+                        count := flag.Int("count", 1, "proverb count")
+                    
+                        // 1b. Flags parsen
+                        flag.Parse()
+                    
+                        // 2. Ausgabe in Schleife
+                        for range *count {
+                            p := proverbs.Random()
+                            fmt.Println(p.Saying)
+                        }                        
+                    }                        
+                </code></pre>
+          <pre><code data-trim data-noescape class="clean">
+                    // Compile mit `go build .`, Ausgabe mit `pro -count=2`
+                    Make the zero value useful.
+                    Reflection is never clear.
+                </code></pre>
+        </section>
       </section>
       <section>
         <section>
           <h1>🖥️ CLI Tool <br /> File Downloader</h1>
         </section>
-      </section>
-      <section>
-        <h2>File Downloader</h2>
-        <ul>
-          <li class="fragment">Paralleler File Download</li>
-          <li class="fragment">Nutzt Goroutinen und Channels</li>
-          <li class="fragment">Context is King</li>
-        </ul>
-      </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">simple #1</span></h2>
-        <pre class="fragment"><code data-trim data-noescape data-line-numbers="1,10|1-5,10|1,7-9,10|" class="go">
-          func main() {
-            urls := []string{
-              "https://go.dev/dl/go1.22.2.src.tar.gz",
-              "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
+        <section>
+          <h2>File Downloader</h2>
+          <ul>
+            <li class="fragment">Paralleler File Download</li>
+            <li class="fragment">Nutzt Goroutinen und Channels</li>
+            <li class="fragment">Context is King</li>
+          </ul>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">simple #1</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1,10|1-5,10|1,7-9,10|" class="go">
+            func main() {
+              urls := []string{
+                "https://go.dev/dl/go1.22.2.src.tar.gz",
+                "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
+              }
+            
+              // URL Download
+              ctx := context.Background()
+              downloadURLs(ctx, urls)
             }
-          
-            // URL Download
-            ctx := context.Background()
-            downloadURLs(ctx, urls)
-          }
-          
-          func downloadURLs(ctx context.Context, urls []string) {
-            // ...
-          }
-        </code></pre>
-      </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">simple #2</span></h2>
-        <pre class="fragment"><code data-trim data-noescape data-line-numbers="2,3|4-11|13-16|" class="go">
-          func downloadURLs(ctx context.Context, urls []string) {
-            // 1. Channel für Download Jobs
-            jobs := make(chan int, len(urls))
-          
-            // 2. Go Routinen für Downloads starten
-            for _, url := range urls {
+            
+            func downloadURLs(ctx context.Context, urls []string) {
+              // ...
+            }
+          </code></pre>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">simple #2</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="2,3|4-11|13-16|" class="go">
+            func downloadURLs(ctx context.Context, urls []string) {
+              // 1. Channel für Download Jobs
+              jobs := make(chan int, len(urls))
+            
+              // 2. Go Routinen für Downloads starten
+              for _, url := range urls {
+                go func() {
+                  downloadURL(ctx, url)
+                  jobs <- 1 // Send an Channel
+                }()
+              }
+            
+              // 3. Warten auf Ende aller Go Routinen
+              for range len(urls) {
+                <-jobs // Receive von Channel
+              }
+            }
+          </code></pre>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">simple #3</span></h2>
+          <pre style="font-size: 46.5%;" class="fragment"><code data-trim data-noescape data-line-numbers="2-3|5-8|10-12|14-15|" class="go">
+            func downloadURL(ctx context.Context, url string) {
+              // 1. HTTP Request mit Context erstellen
+              req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+  
+              // 2. HTTP Aufruf durchführen
+              httpClient := http.Client{}
+              resp, _ := httpClient.Do(req)
+              defer resp.Body.Close()
+  
+              // 3. Ausgabe in Datei
+              file, _ := os.Create(filepath.Base(url))
+              defer file.Close()
+            
+              // 4. HTTP Body in Datei streamen
+              io.Copy(file, resp.Body)
+            }          
+          </code></pre>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">mit Timeout</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|" class="go">
+            func main() {
+              urls := []string{
+                "https://go.dev/dl/go1.22.2.src.tar.gz",
+                "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
+              }
+  
+              // 1. Context mit Cancel Func
+              ctx, cancel := context.WithCancel(context.Background())
+            
+              // 2. Timer Channel nutzen
+              timer := time.After(3 * time.Second)
               go func() {
-                downloadURL(ctx, url)
-                jobs <- 1 // Send an Channel
+                <-timer // Receive timer Channel
+                log.Println("Canceled due to timeout")
+                cancel()
               }()
-            }
-          
-            // 3. Warten auf Ende aller Go Routinen
-            for range len(urls) {
-              <-jobs // Receive von Channel
-            }
-          }
-        </code></pre>
+  
+              // 3. URL Download
+              downloadURLs(ctx, urls)
+            }  
+          </code></pre>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">mit Interrupt</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|" class="go">
+            func main() {
+              urls := []string{
+                "https://go.dev/dl/go1.22.2.src.tar.gz",
+                "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
+              }
+  
+              // 1. Context mit Cancel Func
+              ctx, cancel := context.WithCancel(context.Background())
+            
+              // 2. Interrupt Channel nutzen
+              interrupt := make(chan os.Signal, 1)
+              signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
+              go func() {
+                <-interrupt // Receive interrupt Channel
+                log.Println("Canceled due to interrupt")
+                cancel()
+              }()
+  
+              // 3. URL Download
+              downloadURLs(ctx, urls)
+            }  
+          </code></pre>
+        </section>
+        <section>
+          <h2>File Downloader <span style="font-size: 50%;">mit Select</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="2-4|7-11,16|7,12-16|7-16" class="go">
+            func main() {            
+              // 1. Context mit Cancel Func
+              //    + Timeout Channel
+              //    + Interrupt Channel
+            
+              go func() {
+                select {
+                  // 2a. Receive timer Channel
+                  case <-timer: 
+                    log.Println("Canceled due to timeout")
+                    cancel()
+                  // 2a. Receive interrupt Channel
+                  case <-interrupt: 
+                    log.Println("Canceled due to interrupt")
+                    cancel()
+                  }            
+              }()
+  
+              // 3. URL Download
+              downloadURLs(ctx, urls)
+            }  
+          </code></pre>
+        </section>
       </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">simple #3</span></h2>
-        <pre  style="font-size: 46.5%;" class="fragment"><code data-trim data-noescape data-line-numbers="2-3|5-8|10-12|14-15|" class="go">
-          func downloadURL(ctx context.Context, url string) {
-            // 1. HTTP Request mit Context erstellen
-            req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 
-            // 2. HTTP Aufruf durchführen
-            httpClient := http.Client{}
-            resp, _ := httpClient.Do(req)
-            defer resp.Body.Close()
-
-            // 3. Ausgabe in Datei
-            file, _ := os.Create(filepath.Base(url))
-            defer file.Close()
-          
-            // 4. HTTP Body in Datei streamen
-            io.Copy(file, resp.Body)
-          }          
-        </code></pre>
-      </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">mit Timeout</span></h2>
-        <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|" class="go">
-          func main() {
-            urls := []string{
-              "https://go.dev/dl/go1.22.2.src.tar.gz",
-              "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
-            }
-
-            // 1. Context mit Cancel Func
-            ctx, cancel := context.WithCancel(context.Background())
-          
-            // 2. Timer Channel nutzen
-            timer := time.After(3 * time.Second)
-            go func() {
-              <-timer // Receive Timer Channel
-              log.Println("Canceled due to timeout")
-              cancel()
-            }()
-
-            // 3. URL Download
-            downloadURLs(ctx, urls)
-          }  
-        </code></pre>
-      </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">mit Interrupt</span></h2>
-        <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|" class="go">
-          func main() {
-            urls := []string{
-              "https://go.dev/dl/go1.22.2.src.tar.gz",
-              "https://go.dev/dl/go1.22.2.darwin-amd64.tar.gz",
-            }
-
-            // 1. Context mit Cancel Func
-            ctx, cancel := context.WithCancel(context.Background())
-          
-            // 2. Interrupt Channel nutzen
-            interrupt := make(chan os.Signal, 1)
-            signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
-            go func() {
-              <-interrupt // Receive Interrupt Channel
-              log.Println("Canceled due to interrupt")
-              cancel()
-            }()
-
-            // 3. URL Download
-            downloadURLs(ctx, urls)
-          }  
-        </code></pre>
-      </section>
-      <section>
-        <h2>File Downloader <span style="font-size: 50%;">mit Select</span></h2>
-        <pre class="fragment"><code data-trim data-noescape data-line-numbers="2-4|7-11,16|7,12-16|7-16" class="go">
-          func main() {            
-            // 1. Context mit Cancel Func
-            //    + Timeout Channel
-            //    + Interrupt Channel
-          
-            go func() {
-              select {
-                // 2a. Receive Timeout Channel
-                case <-timer: 
-                  log.Println("Canceled due to timeout")
-                  cancel()
-                // 2a. Receive Interrupt Channel
-                case <-interrupt: 
-                  log.Println("Canceled due to interrupt")
-                  cancel()
-                }            
-            }()
-
-            // 3. URL Download
-            downloadURLs(ctx, urls)
-          }  
-        </code></pre>
-      </section>
       <section>
         <section>
           <h1>🌐 Web Server Cats</h1>
@@ -784,7 +784,61 @@
       </section>
       <section>
         <section>
-          <h1>λ Lambda Function</h1>
+          <h1><span style="color: white;">λ</span> Lambda Function</h1>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function</h2>
+          <ul>
+            <li class="fragment">Go ideal für Serverless Functions</li>            
+            <li class="fragment">schneller Start, geringer Speicherbedarf</li>
+            <li class="fragment">unterstützt von AWS, Azure, Google</li>            
+          </ul>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function</h2>
+         <img src="themes/lambda-jax-hello.png"></img>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function </h2>
+          <pre style="font-size: 0.43em;" class="fragment"><code data-trim data-noescape data-line-numbers="1-2|4-5|7-18|" class="bash">  
+            // 1. Lambda Go Projekt aufsetzen
+            > sam init
+
+            // 2. Lambda bauen
+            > sam build
+
+            // 3. Lambda ausführen lokal
+            > sam local invoke -e events/event.json
+            Invoking bootstrap (provided.al2023)                                                                             
+            Local image is up-to-date                                                                                                     
+            Using local image: public.ecr.aws/lambda/provided:al2023-rapid-x86_64.                                                        
+                                                                                                                                          
+            Mounting .aws-sam/build/HelloWorldFunction, inside runtime container                                                                              
+            REPORT RequestId: 37876f36  Init Duration: 0.52 ms  Duration: 80.04 ms      #
+            Billed Duration: 81 ms  Memory Size: 128 MB   Max Memory Used: 128 MB
+            {"statusCode": 200, "body": "Hello, world!"}
+           </code></pre>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function </h2>
+          <pre style="font-size: 0.375em;" class="fragment"><code data-trim data-noescape data-line-numbers="14-16|7-12|" class="go">  
+            import (
+              "fmt"
+              "github.com/aws/aws-lambda-go/events"
+              "github.com/aws/aws-lambda-go/lambda"
+            )
+            
+            func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+              return events.APIGatewayProxyResponse{
+                Body:       "Hello, world!",
+                StatusCode: 200,
+              }, nil
+            }
+            
+            func main() {
+              lambda.Start(handler)
+            }            
+           </code></pre>
         </section>
       </section>
       <section>
