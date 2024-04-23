@@ -830,7 +830,7 @@
             
             func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
               return events.APIGatewayProxyResponse{
-                Body:       "Hello, world!",
+                Body:       "Hello JAX!",
                 StatusCode: 200,
               }, nil
             }
@@ -839,6 +839,40 @@
               lambda.Start(handler)
             }            
            </code></pre>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function </h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|3" class="bash">
+                    # Query AWS Lambda
+                    curl -s https://0up9.eu-north-1.amazonaws.com/Prod/hello
+                    Hello JAX!
+            </code></pre>
+
+            <div class="fragment">
+              <h4>Footprint</h4>
+              <ul style="font-size: 80%;">
+                <li>Package Size 5,3 MB</li>
+                <li>Billed Duration 70 ms</li>
+                <li>Max Memory Used 18 MB</li>
+                <li>Init Duration 63.66 ms	</li>
+              </ul>
+            </div>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function <small>Projekt</small> </h2>
+          <pre class="fragment"><code data-trim data-noescape class="bash">
+            |-events
+               | event.json // Beispiel Request
+            |-hello-world   // Go App
+               | go.mod
+               | go.sum
+               | main.go
+               | main_test.go
+            | Makefile       // Build File
+            | samconfig.toml // SAM Config
+            | template.yaml  // SAM Config
+            | README.md
+            </code></pre>
         </section>
       </section>
       <section>
