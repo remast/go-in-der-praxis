@@ -69,6 +69,7 @@
             Lambda Function</h2>
         </section>
       </section>
+      <!--
       <section>
         <section>
           <div class="grid grid-cols-3 gap-1 items-center">
@@ -125,6 +126,7 @@
             </div>
           </div>
         </section>
+        -->
         <section>
           <h2>5 Fakten zu Go</h2>
           <div class="grid grid-cols-12 gap-1 items-center">
@@ -168,11 +170,11 @@
         </section>
         <section>
           <h2>CLI Projekt aufsetzen</h2>
-          <pre class="fragment"><code data-trim data-noescape class="clean">
+          <pre style="font-size: .5em;" class="fragment"><code data-trim data-noescape class="clean">
                         // 1. Go Modul erstellen (erzeugt go.mod)
                         > go mod init crossnative.com/pro
                     </code></pre>
-          <pre class="fragment"><code data-trim data-noescape class="go">
+          <pre style="font-size: .5em;" class="fragment"><code data-trim data-noescape class="go">
                         // 2. Datei main.go erstellen
                         package main
 
@@ -182,6 +184,34 @@
                             fmt.Println("Hello Go Pro!")
                         }
                     </code></pre>
+                    <span class="fragment">
+                      Ausführen
+                      <pre style="font-size: .5em;"><code data-trim data-noescape>
+                                go build . // 1. Code kompilieren
+                                ./pro      // 2. Binary ausführen
+                                </code></pre>
+                    </span>
+                    <pre  style="font-size: .5em;" class="fragment"><code data-trim data-noescape>
+                                    go run .   // Code kompilieren und ausführen
+                    </code></pre>
+        
+        </section>
+        <section>
+          <h2>Entwicklung</h2>
+          <div class="grid grid-cols-3 gap-32 items-center">
+            <div class="col-span-1 fragment">
+              <img src="./themes/goland_logo_300x300.png" />
+              JetBrains GoLand
+            </div>
+            <div class="col-span-1 fragment">
+              <img src="./themes/Visual_Studio_Code_1.35_icon.svg" />
+              Visual Studio Code
+            </div>
+            <div class="col-span-1 fragment">
+              <img src="./themes/Vimlogo.svg" />
+              Vim Go
+            </div>
+          </div>
         </section>
         <section>
           <h2>Proverbs als Go Modul</h2>
@@ -217,7 +247,7 @@
                         }
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="clean">
-                        // Ausgabe `go run  main.go`
+                        // Ausgabe `go run .`
                         &{Make the zero value useful. http://youtube.com/322}
                     </code></pre>
         </section>
@@ -264,7 +294,7 @@
                         }
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="clean">
-                        // Ausgabe `go run  main.go`
+                        // Ausgabe `go run .`
                         Make the zero value useful.
                     </code></pre>
         </section>
@@ -490,7 +520,17 @@
           </code></pre>
         </section>
       </section>
-
+      <section>
+        <section>
+          <h2>🖥️ CLI Tools</h2>
+          <ul>
+            <li class="fragment">Standardlib Flags</li>
+            <li class="fragment">einfache Releases mit Goreleaser</li>
+            <li class="fragment">Cobra CLI Lib wenn's komplexer wird</li>
+            <li class="fragment">Github, Kubernetes sind Go CLIs</li>            
+          </ul>
+        </section>
+      </section>
       <section>
         <section>
           <h1>🌐 Web App Cats</h1>
@@ -809,6 +849,18 @@
                    </code></pre>
         </section>
       </section>
+
+      <section>
+        <section>
+          <h2>🌐 Web App</h2>
+          <ul>
+            <li class="fragment">Standardlib JSON und Router</li>
+            <li class="fragment">HTTP Tests</li>
+            <li class="fragment">Querschnittsfeatures durch Middleware</li>
+          </ul>
+        </section>
+      </section>
+
       <section>
         <section>
           <h1><span style="color: white;">λ</span> Lambda Function</h1>
