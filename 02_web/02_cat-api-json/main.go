@@ -17,6 +17,12 @@ func catAPIHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("GET /api/cats", catAPIHandler)
-	http.ListenAndServe(":8080", nil)
+	// 1. Mulitplexer erzeugen
+	mux := http.NewServeMux()
+
+	// 2. Handler registrieren
+	mux.HandleFunc("GET /api/cats", catAPIHandler)
+
+	// 3. Server mit Mulitplexer starten
+	http.ListenAndServe(":8080", mux)
 }
