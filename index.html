@@ -49,9 +49,11 @@
           <h1>467.882 <span style="font-size: 50%;">Zeilen Code</span></h1>
           <h1>2.130 <span style="font-size: 50%;">Contributors</span></h1>
         </section>
+        <!--
         <section>
           <img src="./themes/Go-Logo_White.png" width="60%" style="margin: auto;" />
         </section>
+        -->
       </section>
       </section>
       <section>
@@ -61,7 +63,7 @@
               style="margin-left: .2em; width: 1.3em; display: inline-block;">🖥️</span> CLI Tools</h2>
           <h2 class="fragment" style="margin-bottom: .7em;"><small
               style="color: rgba(255, 200, 0, 0.6);">2.</small><span
-              style="margin-left: .2em; width: 1.3em; display: inline-block;">🌐</span> Web Server Proverbs</h2>
+              style="margin-left: .2em; width: 1.3em; display: inline-block;">🌐</span> Web App</h2>
           <h2 class="fragment"><small style="color: rgba(255, 200, 0, 0.6);">3.</small><span
               style="color: white; margin-left: .2em; width: 1.3em; display: inline-block;">λ</span>
             Lambda Function</h2>
@@ -165,23 +167,12 @@
                     </code></pre>
         </section>
         <section>
-          <h2>CLI Proverbs <small>mit Count</small></h2>
-          <pre><code data-trim data-noescape class="bash">
-                        > pro -count=3
-                    </code></pre>
-          <pre class="fragment"><code data-trim data-noescape class="bash">
-                        Clear is better than clever.
-                        Documentation is for users.
-                        Don't panic.
-                    </code></pre>
-        </section>
-        <section>
           <h2>CLI Projekt aufsetzen</h2>
-          <pre><code data-trim data-noescape class="clean">
+          <pre class="fragment"><code data-trim data-noescape class="clean">
                         // 1. Go Modul erstellen (erzeugt go.mod)
                         > go mod init crossnative.com/pro
                     </code></pre>
-          <pre><code data-trim data-noescape class="go">
+          <pre class="fragment"><code data-trim data-noescape class="go">
                         // 2. Datei main.go erstellen
                         package main
 
@@ -198,12 +189,12 @@
         </section>
         <section>
           <h2>Proverbs Modul nutzen</h2>
-          <pre><code data-trim data-noescape class="clean">
-                        // 1. Proverbs Modul Abhängigkeit
+          <pre class="fragment"><code data-trim data-noescape class="clean">
+                        // 1. Proverbs Modul Dependency
                         > go get github.com/jboursiquot/go-proverbs
                     </code></pre>
-          <pre><code data-trim data-noescape class="clean">
-                        // 2. Go Modul Descriptor go.mod
+          <pre class="fragment"><code data-trim data-noescape class="clean">
+                        // 2. Go Modul Descriptor go.mod (mit go.sum)
                         module crossnative.com/pro
 
                         go 1.22
@@ -241,7 +232,9 @@
                         )
                         
                         func main() {
+                            // Pointer Variable auf Proverb Struct
                             var p *proverbs.Proverb = proverbs.Random()
+                            
                             fmt.Println(p)
                         }
                     </code></pre>
@@ -255,7 +248,7 @@
         </section>
         <section>
           <h2>Zufälliges Proverb ausgeben</h2>
-          <pre><code data-trim data-noescape class="go" data-line-numbers="3,5,6|3,5,6,9|">
+          <pre><code data-trim data-noescape class="go" data-line-numbers="3,5,6|3,5,6,9|11-12|">
                         package main
 
                         import (
@@ -265,6 +258,8 @@
                         
                         func main() {
                             var p *proverbs.Proverb = proverbs.Random()
+
+                            // Zugriff auf Property des Structs
                             fmt.Println(p.Saying)
                         }
                     </code></pre>
@@ -274,8 +269,19 @@
                     </code></pre>
         </section>
         <section>
+          <h2>CLI Proverbs <small>mit Count</small></h2>
+          <pre><code data-trim data-noescape class="bash">
+                        > pro -count=3
+                    </code></pre>
+          <pre class="fragment"><code data-trim data-noescape class="bash">
+                        Clear is better than clever.
+                        Documentation is for users.
+                        Don't panic.
+                    </code></pre>
+        </section>
+        <section>
           <h2>Flag für Count</h2>
-          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="3,5,6|3,5,6,9|">
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="2,9|11-12|14-18|">
                         import (
                             "flag"
                             "fmt"
@@ -296,14 +302,14 @@
                             }                        
                         }                        
                     </code></pre>
-          <pre class="fragment"><code data-trim data-noescape class="clean">
+          <pre style="font-size: 45%;" class="fragment"><code data-trim data-noescape class="clean">
                         // Compile mit `go build .`, Ausgabe mit `pro -count=2`
                         Make the zero value useful.
                         Reflection is never clear.
                     </code></pre>
         </section>
         <section>
-          <h2>Flag für Count</h2>
+          <h2>Flag für Count <small>Refactored</small></h2>
           <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9,16|15,18|">
                     import (
                         "flag"
@@ -325,7 +331,7 @@
                         }                        
                     }                        
                 </code></pre>
-          <pre><code data-trim data-noescape class="clean">
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="clean">
                     // Compile mit `go build .`, Ausgabe mit `pro -count=2`
                     Make the zero value useful.
                     Reflection is never clear.
@@ -345,8 +351,8 @@
           </ul>
         </section>
         <section>
-          <h2>File Downloader <span style="font-size: 50%;">simple #1</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1,10|1-5,10|1,7-9,10|" class="go">
+          <h2>File Downloader <span style="font-size: 50%;">1/3</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-5,10|1-5,10|1,7-9,10|" class="go">
             func main() {
               urls := []string{
                 "https://go.dev/dl/go1.22.2.src.tar.gz",
@@ -364,7 +370,7 @@
           </code></pre>
         </section>
         <section>
-          <h2>File Downloader <span style="font-size: 50%;">simple #2</span></h2>
+          <h2>File Downloader <span style="font-size: 50%;">2/3</span></h2>
           <pre class="fragment"><code data-trim data-noescape data-line-numbers="2,3|4-11|13-16|" class="go">
             func downloadURLs(ctx context.Context, urls []string) {
               // 1. Channel für Download Jobs
@@ -374,20 +380,20 @@
               for _, url := range urls {
                 go func() {
                   downloadURL(ctx, url)
-                  jobs <- 1 // Send an Channel
+                  jobs <- 1 // Send an Channel (blockiert)
                 }()
               }
             
               // 3. Warten auf Ende aller Go Routinen
               for range len(urls) {
-                <-jobs // Receive von Channel
+                <-jobs // Receive von Channel (blockiert)
               }
             }
           </code></pre>
         </section>
         <section>
-          <h2>File Downloader <span style="font-size: 50%;">simple #3</span></h2>
-          <pre style="font-size: 46.5%;" class="fragment"><code data-trim data-noescape data-line-numbers="2-3|5-8|10-12|14-15|" class="go">
+          <h2>File Downloader <span style="font-size: 50%;">3/3</span></h2>
+          <pre style="font-size: 46.5%;" class="fragment"><code data-trim data-noescape data-line-numbers="1-3|5-7|10-12|14-15|" class="go">
             func downloadURL(ctx context.Context, url string) {
               // 1. HTTP Request mit Context erstellen
               req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
@@ -408,7 +414,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Timeout</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|" class="go">
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|7-19" class="go">
             func main() {
               urls := []string{
                 "https://go.dev/dl/go1.22.2.src.tar.gz",
@@ -433,7 +439,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Interrupt</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|" class="go">
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|7-20" class="go">
             func main() {
               urls := []string{
                 "https://go.dev/dl/go1.22.2.src.tar.gz",
@@ -487,11 +493,13 @@
 
       <section>
         <section>
-          <h1>🌐 Web Server Cats</h1>
+          <h1>🌐 Web App Cats</h1>
         </section>
+        <!--
         <section>
           <img src="themes/cats_app_web.png" />
         </section>
+        -->
       </section>
       <section>
         <section>
@@ -528,15 +536,21 @@
         </section>
         <section>
           <h2>Cat API <span style="font-size: 50%;">mit JSON</span></h2>
-          <pre class="fragment" style="font-size: 0.51em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="5-8|1-3|1-8|1-13" class="go">
+          <pre class="fragment" style="font-size: 0.51em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1-4|6,15|6,7-8,15|6,10-11,15|6,13-14,15|" class="go">
+                    // 1. Struct mit JSON Tag definieren
                     type Cat struct {
                       Name string `json:"name"`
                     }
                     
                     func catAPIHandler(w http.ResponseWriter, r *http.Request) {
+                      // 2. Slice erstellen
                       cats := make([]Cat, 1)
+
+                      // 3. Struct erstellen und einfügen
                       cats[0] = Cat{Name: "Ginger"}
-                      json.NewEncoder(w).Encode(c)
+
+                      // 4. JSON rendern
+                      json.NewEncoder(w).Encode(cats)
                     }
                                 
                     func main() {
@@ -566,16 +580,16 @@
           <h2>Test Cat API <span style="font-size: 50%;"><code>cat_api_test.go</code></span></h2>
           <pre class="fragment" style="font-size: 0.48em; overflow: hidden; margin-left: 0; margin-right: 0;"><code data-trim data-noescape data-line-numbers="1,15|2-3|5-6|8-9|11-14|1-15" class="go">
                   func TestCatAPIHandler(t *testing.T) {
-                    // 1. Create test request
+                    // 1. Test Request erstellen
                     req, _ := http.NewRequest("GET", "/api/cats", nil)
                   
-                    // 2. Create recorder (which satisfies http.ResponseWriter)
+                    // 2. HTTP Recorder erstellen (ist http.ResponseWriter)
                     rec := httptest.NewRecorder()
                   
-                    // 3. Invoke handler
+                    // 3. Handler aufrufen
                     catAPIHandler(rec, req)
         
-                    // 4. Check the response
+                    // 4. Response prüfen
                     if rec.Code != http.StatusOK {
                       t.Errorf("got status %v expected %v", rec.Code, http.StatusOK)
                     }
@@ -583,9 +597,8 @@
                   </code></pre>
         </section>
         <section>
-          <h2>Run Test</h2>
-          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1-2|3-7" class="bash">
-                    # Run tests
+          <h2>Test ausführen</h2>
+          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1|2-7" class="bash">
                     go test -v ./...
                     === RUN   TestCatAPIHandler
                     --- PASS: TestCatAPIHandler (0.00s)
@@ -600,31 +613,21 @@
           <h1>Cats App <br /> Web</h1>
         </section>
         <section>
-          <h2>Cats Handler <span style="font-size: 50%;">basic template setup</span></h2>
-          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1-3|10|1-13" class="go">  
+          <h2>Cats Web App</h2>
+          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="7-8|10-11|13-14|" class="go">  
                     func indexHandler(w http.ResponseWriter, r *http.Request) {
                       tpl := template.Must(template.ParseFiles("index.html"))
                       tpl.Execute(w, nil)
                     }
         
                     func main() {
-                      http.HandleFunc("/", indexHandler)
-                      http.ListenAndServe(":8080", nil)
-                    }
-                  </code></pre>
-        </section>
-        <section>
-          <h2>Cats Handler <span style="font-size: 50%;">with multiplexer</span></h2>
-          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="7-8|10|1-13" class="go">  
-                    func indexHandler(w http.ResponseWriter, r *http.Request) {
-                      tpl := template.Must(template.ParseFiles("index.html"))
-                      tpl.Execute(w, nil)
-                    }
-        
-                    func main() {
+                      // 1. Mulitplexer erzeugen
                       mux := http.NewServeMux()
+
+                      // 2. Handler registrieren
                       mux.HandleFunc("/", indexHandler)
         
+                      // 3. Server mit Mulitplexer starten
                       http.ListenAndServe(":8080", mux)
                     }
                   </code></pre>
@@ -636,14 +639,15 @@
             </ul>
           </aside>
         </section>
+        <!--
         <section>
-          <h2>Serve files <span style="font-size: 50%;">from Filesystem</span></h2>
+          <h2>File Server<span style="font-size: 50%;">aus Dateisystem</span></h2>
           <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="5-7" class="go">
                     func main() {
                       mux := http.NewServeMux()
                       mux.HandleFunc("/", indexHandler)
         
-                      // Serve files
+                      // Serve Files
                       fs := http.FileServer(http.Dir("assets"))
                       mux.Handle("/assets/", http.StripPrefix("/assets/", fs))            
         
@@ -651,9 +655,10 @@
                     }
                   </code></pre>
         </section>
+        -->
         <section>
-          <h2>Serve files <span style="font-size: 50%;">embedded in binary</span></h2>
-          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="8-9|8-9,1-2|6,9" class="go">
+          <h2>File Server <span style="font-size: 50%;">aus Binary</span></h2>
+          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="8-9,1-2" class="go">
                     //go:embed assets
                     var assets embed.FS
         
@@ -661,7 +666,7 @@
                       mux := http.NewServeMux()
                       mux.HandleFunc("/", indexHandler)
         
-                      // Serve files
+                      // Serve Files
                       mux.Handle("/assets/", http.FileServer(http.FS(assets)))
         
                       http.ListenAndServe(":8080", mux)
@@ -675,7 +680,7 @@
                 </section>
                 -->
         <section>
-          <h2>Cats Handler <span style="font-size: 50%;">template with data</span></h2>
+          <h2>Index Handler <span style="font-size: 50%;">Template mit Daten</span></h2>
           <div class="grid grid-cols-3 gap-1 text-left">
             <div class="col-span-2 fragment">
               <pre style="font-size: 0.4em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
@@ -684,13 +689,13 @@
                         }
         
                         func indexHandler(w ResponseWriter, r *Request) {
-                          // Create cat slice
+                          // 1. Slice erstellen
                           cat := make([]Cat, 1)
                         
-                          // Add cat ginger
+                          // 2. Struct erstellen und einfügen
                           cat[0] = Cat{Name: "Ginger"}
                         
-                          // Render template
+                          // 3. Template rendern
                           tpl := template.Must(template.ParseFiles("index.html"))
                           tpl.Execute(w, cat)
                         }
@@ -711,7 +716,7 @@
         <section data-background-image="themes/the-cat-api.png">
         </section>
         <section>
-          <h2>Cats Handler <span style="font-size: 50%;">with Cats API</span></h2>
+          <h2>Index Handler <span style="font-size: 50%;">mit Cats API</span></h2>
           <div class="grid grid-cols-3 gap-1 text-left">
             <div class="col-span-2 fragment">
               <span style="font-size: 70%">Query Cats API</span>
@@ -739,7 +744,7 @@
                       </code></pre>
             </div>
             <div class="col-span-4 fragment">
-              <span style="font-size: 70%">Map JSON</span>
+              <span style="font-size: 70%">Map JSON auf Struct</span>
               <pre style="font-size: 0.38em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
                         type Cat struct {
                           ID    string `json:"id"`
@@ -757,29 +762,51 @@
                 </section>
                 -->
         <section>
-          <h2>Cats Handler <span style="font-size: 50%;">with Cats API</span></h2>
-          <pre style="font-size: 0.43em;" class="fragment"><code data-trim data-noescape data-line-numbers="2-6|8-10|11-14|1-17" class="go">  
+          <h2>Index Handler <span style="font-size: 50%;">mit Cats API</span></h2>
+          <pre style="font-size: 0.43em;" class="fragment"><code data-trim data-noescape data-line-numbers="2-3|5-6|8-11|13-14|" class="go">  
                     func indexHandler(w http.ResponseWriter, r *http.Request) {
+                      // 1. Cat API Aufruf (Fehler ignorieren)
+                      resp, _ := http.Get("https://api.thecatapi.com/v1/breeds?limit=5")
+                    
+                      // 2. Slice für Cat Structs
+                      cat := make([]Cat, 5)
+        
+                      // 3. Response Body parsen
+                      defer resp.Body.Close()            
+                      body, _ := ioutil.ReadAll(resp.Body)
+                      json.Unmarshal(body, &cat)
+                    
+                      // 4. Template rendern
+                      tpl.Execute(w, cat)
+                    }
+                   </code></pre>
+        </section>
+        <section data-background-color="#541298">
+          <h2>Index Handler <span style="font-size: 50%;">mit Fehlerhandling 💣</span></h2>
+          <pre style="font-size: 0.43em;" class="fragment"><code data-trim data-noescape data-line-numbers="2-3|4-8|2-8,16-17,20-21" class="go">  
+                    func indexHandler(w http.ResponseWriter, r *http.Request) {
+                      // 1. Cat API Aufruf
                       resp, err := http.Get("https://api.thecatapi.com/v1/breeds?limit=5")
+                      //    Fehler behandeln
                       if err != nil {
                         http.Error(w, "Cats API error", http.StatusInternalServerError)
                         return
                       }
                     
-                      // Create cat slice
+                      // 2. Slice für Cat Structs
                       cat := make([]Cat, 5)
         
-                      // Read and parse body
+                      // 3. Response Body parsen
                       defer resp.Body.Close()            
                       body, _ := ioutil.ReadAll(resp.Body)
-                      json.Unmarshal(body, &cat)
+                      err := json.Unmarshal(body, &cat)
+                      // TODO: Fehler behandeln
                     
-                      tpl.Execute(w, cat)
+                      // 4. Template rendern
+                      err := tpl.Execute(w, cat)
+                      // TODO: Fehler behandeln
                     }
                    </code></pre>
-        </section>
-        <section>
-          <h3>Demo</h3>
         </section>
       </section>
       <section>
@@ -807,7 +834,7 @@
             // 2. Lambda bauen
             > sam build
 
-            // 3. Lambda ausführen lokal
+            // 3. Lambda ausführen
             > sam local invoke -e events/event.json
             Invoking bootstrap (provided.al2023)                                                                             
             Local image is up-to-date                                                                                                     
@@ -816,8 +843,30 @@
             Mounting .aws-sam/build/HelloWorldFunction, inside runtime container                                                                              
             REPORT RequestId: 37876f36  Init Duration: 0.52 ms  Duration: 80.04 ms      #
             Billed Duration: 81 ms  Memory Size: 128 MB   Max Memory Used: 128 MB
-            {"statusCode": 200, "body": "Hello, world!"}
+            {"statusCode": 200, "body": "Hello JAX!"}
            </code></pre>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function </h2>
+          <img src="themes/aws-lambda-jax-hello.png"/>
+        </section>
+        <section>
+          <h2><span style="color: white;">λ</span> Lambda Function </h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|3" class="bash">
+                    # Query AWS Lambda
+                    curl -s https://0up9.eu-north-1.amazonaws.com/Prod/hello
+                    Hello JAX!
+            </code></pre>
+
+            <div class="fragment">
+              <h4>Footprint</h4>
+              <ul style="font-size: 80%;">
+                <li>Package Size 5,3 MB</li>
+                <li>Billed Duration 70 ms</li>
+                <li>Max Memory Used 18 MB</li>
+                <li>Init Duration 63.66 ms	</li>
+              </ul>
+            </div>
         </section>
         <section>
           <h2><span style="color: white;">λ</span> Lambda Function </h2>
@@ -841,24 +890,6 @@
            </code></pre>
         </section>
         <section>
-          <h2><span style="color: white;">λ</span> Lambda Function </h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|3" class="bash">
-                    # Query AWS Lambda
-                    curl -s https://0up9.eu-north-1.amazonaws.com/Prod/hello
-                    Hello JAX!
-            </code></pre>
-
-            <div class="fragment">
-              <h4>Footprint</h4>
-              <ul style="font-size: 80%;">
-                <li>Package Size 5,3 MB</li>
-                <li>Billed Duration 70 ms</li>
-                <li>Max Memory Used 18 MB</li>
-                <li>Init Duration 63.66 ms	</li>
-              </ul>
-            </div>
-        </section>
-        <section>
           <h2><span style="color: white;">λ</span> Lambda Function <small>Projekt</small> </h2>
           <pre class="fragment"><code data-trim data-noescape class="bash">
             |-events
@@ -879,64 +910,33 @@
         <section>
           <div class="grid grid-cols-3 gap-1 text-left">
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;">🖥️ CLI Tool</h4>
+              <h4 style="padding-bottom: 10px;">🖥️ CLI Tools</h4>
               <ul style="font-size: 95%;">
-                <li>Variablen, Slices, Schleifen</li>
-                <li>Struct</li>
+                <li>Projekt Setup</li>
+                <li>Variablen, Schleifen</li>
+                <li>Goroutinen, Channels</li>
+                <li>Context</li>
+                <li>Structs</li>
               </ul>
             </div>
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;">🌐 Web Server</h4>
+              <h4 style="padding-bottom: 10px;">🌐 Web App</h4>
               <ul style="font-size: 95%;">
-                <li>Struct Embedding</li>
-                <li>Fehler</li>
-                <li>Generics</li>
+                <li>Web Server</li>
+                <li>Slice</li>
+                <li>Unit Test</li>
+                <li>JSON</li>
+                <li>Fehlerhandling</li>
               </ul>
             </div>
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;">λ Lambda Func</h4>
+              <h4 style="padding-bottom: 10px;"><span style="color: white;">λ</span> Lambda Func</h4>
               <ul style="font-size: 95%;">
-                <li>Interface</li>
-                <li>Goroutine</li>
-                <li>Channel</li>
-                <li>Standardbibliothek</li>
+                <li>AWS Setup</li>
+                <li>Serverless Experience</li>
               </ul>
             </div>
           </div>
-        </section>
-        <section>
-          <div class="grid grid-cols-3 gap-1 text-left">
-            <div class="fragment">
-              <h4 style="padding-bottom: 10px;"><span style="font-size: 80%;">Einfach</span> Langweilig
-              </h4>
-              <ul style="font-size: 95%;">
-                <li>Variablen, Slices, Schleifen</li>
-                <li>Struct</li>
-              </ul>
-            </div>
-            <div class="fragment">
-              <h4 style="padding-bottom: 10px;"><span style="font-size: 80%;">&nbsp;</span> <br /> Zu
-                Einfach?</h4>
-              <ul style="font-size: 95%;">
-                <li>Struct Embedding</li>
-                <li>Fehler</li>
-                <li>Generics</li>
-              </ul>
-            </div>
-            <div class="fragment">
-              <h4 style="padding-bottom: 10px;"><span style="font-size: 80%;">&nbsp;</span> <br /> Mächtig
-              </h4>
-              <ul style="font-size: 95%;">
-                <li>Interface</li>
-                <li>Goroutine</li>
-                <li>Channel</li>
-                <li>Standardbibliothek</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-        <section>
-          <h2>Demo</h2>
         </section>
         <section>
           <h2 style="font-size: 170%;">3 Gründe für Go</h2>
@@ -947,7 +947,7 @@
           </ol>
         </section>
         <section>
-          <h2>Go Liebt</h2>
+          <h2>Go liebt</h2>
           <div class="grid grid-cols-2 gap-10 text-left">
             <div class="fragment">
               <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-box"
@@ -1024,78 +1024,6 @@
             </div>
         </section>
       </section>
-      <!--
-            <section>
-                <section>
-                    <h1>Referenzen und Pointer</h1>
-                </section>
-                <section data-run-in-terminal="03_pointer\congressman.go" data-run-in-terminal-bin="go">
-                    <h2>Peter Russo bestechen #1</h2>
-                    <pre style="font-size: 0.48em;"><code data-trim data-line-numbers="3,6-8,11-13"  data-noescape class="go">
-                        type Congressman struct {
-                          Name string
-                          AccountBalance float64
-                        }
-                        
-                        func (c Congressman) bribe(amount float64) {
-                          c.AccountBalance += amount 
-                        }
-                        
-                        func main() {
-                          c := Congressman{Name: "Peter Russo", AccountBalance: -10.0}
-                          c.bribe(5000.0)
-
-                          fmt.Printf("%v is worth %v", c.Name, c.AccountBalance)
-                        }
-                 </code></pre>
-                </section>
-                <section data-run-in-terminal="03_pointer_fix\congressman.go" data-run-in-terminal-bin="go">
-                    <h2>Peter Russo bestechen #2</h2>
-                    <pre style="font-size: 0.48em;"><code data-trim data-line-numbers="6,11,12"  data-noescape class="go">
-                          type Congressman struct {
-                            Name string
-                            AccountBalance float64
-                          }
-                          
-                          func (c *Congressman) bribe(amount float64) {
-                            c.AccountBalance += amount 
-                          }
-                          
-                          func main() {
-                            c := &Congressman{Name: "Peter Russo", AccountBalance: -10.0}
-                            c.bribe(5010.0)
-  
-                            fmt.Printf("%v is worth %v", c.Name, c.AccountBalance)
-                          }
-                 </code></pre>
-                </section>
-                <section>
-                    <h2>Referencen und Pointer Recap</h2>
-                </section>
-            </section>
-            <section>
-                <h2>Slide 1</h2>
-                <pre>
-						<code class="language-plantuml">
-						</code>
-						</pre>
-            </section>
-            <section data-background-iframe="https://play.golang.org/p/P7bm9LMZgXu" data-background-interactive>
-                <h2>Iframe</h2>
-            </section>
-            <section data-run-in-terminal="hellogopher.go" data-run-in-terminal-bin="go">
-                <pre><code data-trim data-noescape>
-                    package main
-                    
-                    import "fmt"
-                    
-                    func main() {
-                        fmt.Println("Hello Gopher!")
-                    }
-                </code></pre>
-            </section>
-        -->
-
     </div>
   </div>
 
