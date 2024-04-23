@@ -27,7 +27,7 @@
         <h1>Go in der Praxis</h1>
       </section>
       <section>
-        <section data-background-image="./themes/cameron-venti-1cqIcrWFQBI-unsplash.jpg">
+        <section data-background-image="./themes/kubectl-cover.png">
           <aside class="notes">
             <ul>
               <li>2013 begann eine Truppe um Solomon Hykes die Welt der Linux Container zu revolutionieren
@@ -39,15 +39,9 @@
           </aside>
         </section>
         <section>
-          <div class="grid grid-cols-3 gap-1 items-center">
-            <div></div>
-            <div class="">
-              <img src="./themes/Moby-logo.png" width="400px" class="align-middle"></img>
-            </div>
-            <div></div>
-          </div>
-          <h1>467.882 <span style="font-size: 50%;">Zeilen Code</span></h1>
-          <h1>2.130 <span style="font-size: 50%;">Contributors</span></h1>
+          <h1 class="cross-yellow"><code style="font-size: 110%;">kubectl</code></h1>
+          <h1>278.536 <span style="font-size: 50%;">Zeilen Code</span></h1>
+          <h1>441 <span style="font-size: 50%;">Contributors</span></h1>
         </section>
         <!--
         <section>
@@ -224,7 +218,7 @@
                         > go get github.com/jboursiquot/go-proverbs
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="clean">
-                        // 2. Go Modul Descriptor go.mod (mit go.sum)
+                        // 2. Go Modul Descriptor go.mod
                         module crossnative.com/pro
 
                         go 1.22
@@ -311,7 +305,7 @@
         </section>
         <section>
           <h2>Flag für Count</h2>
-          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="2,9|11-12|14-18|">
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="2,8-9|11-12|14-18|">
                         import (
                             "flag"
                             "fmt"
@@ -423,7 +417,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">3/3</span></h2>
-          <pre style="font-size: 46.5%;" class="fragment"><code data-trim data-noescape data-line-numbers="1-3|5-8|10-12|14-15|" class="go">
+          <pre style="font-size: 45.3%;" class="fragment"><code data-trim data-noescape data-line-numbers="1-3|5-8|10-12|14-15|" class="go">
             func downloadURL(ctx context.Context, url string) {
               // 1. HTTP Request mit Context erstellen
               req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
@@ -444,7 +438,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Timeout</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|7-19" class="go">
+          <pre class="fragment" style="font-size: 53%;"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|7-19" class="go">
             func main() {
               urls := []string{
                 "https://go.dev/dl/go1.22.2.src.tar.gz",
@@ -469,7 +463,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Interrupt</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|7-20" class="go">
+          <pre class="fragment" style="font-size: 53%;"><code data-trim data-noescape data-line-numbers="7-8,19-20|10-17|7-20" class="go">
             func main() {
               urls := []string{
                 "https://go.dev/dl/go1.22.2.src.tar.gz",
@@ -495,7 +489,7 @@
         </section>
         <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Select</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="2-4|7-11,16|7,12-16|7-16" class="go">
+          <pre class="fragment" style="font-size: 53%;"><code data-trim data-noescape data-line-numbers="2-4|7-11,16|7,12-16|7-16" class="go">
             func main() {            
               // 1. Context mit Cancel Func
               //    + Timeout Channel
@@ -507,7 +501,7 @@
                   case <-timer: 
                     log.Println("Canceled due to timeout")
                     cancel()
-                  // 2a. Receive interrupt Channel
+                  // 2b. Receive interrupt Channel
                   case <-interrupt: 
                     log.Println("Canceled due to interrupt")
                     cancel()
@@ -562,7 +556,7 @@
         </section>
         <section>
           <h2>Cat API <span style="font-size: 50%;">simple</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="6-9|1-4" class="go">
+          <pre class="fragment" style="font-size: 52%;"><code data-trim data-noescape data-line-numbers="6-9|1-4" class="go">
                     func catAPIHandler(w http.ResponseWriter, r *http.Request) {
                       fmt.Fprintf(w, "Meow!")
                       w.WriteHeader(http.StatusOK)
@@ -618,7 +612,7 @@
         </section>
         <section>
           <h2>Test Cat API <span style="font-size: 50%;"><code>cat_api_test.go</code></span></h2>
-          <pre class="fragment" style="font-size: 0.48em; overflow: hidden; margin-left: 0; margin-right: 0;"><code data-trim data-noescape data-line-numbers="1,15|2-3|5-6|8-9|11-14|1-15" class="go">
+          <pre class="fragment" style="font-size: 0.47em; overflow: hidden; margin-left: 0; margin-right: 0;"><code data-trim data-noescape data-line-numbers="1,15|2-3|5-6|8-9|11-14|1-15" class="go">
                   func TestCatAPIHandler(t *testing.T) {
                     // 1. Test Request erstellen
                     req, _ := http.NewRequest("GET", "/api/cats", nil)
@@ -638,7 +632,7 @@
         </section>
         <section>
           <h2>Test ausführen</h2>
-          <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1|2-7" class="bash">
+          <pre class="fragment" style="font-size: 0.45em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="1|2-7" class="bash">
                     go test -v ./...
                     === RUN   TestCatAPIHandler
                     --- PASS: TestCatAPIHandler (0.00s)
@@ -723,7 +717,7 @@
           <h2>Index Handler <span style="font-size: 50%;">Template mit Daten</span></h2>
           <div class="grid grid-cols-3 gap-1 text-left">
             <div class="col-span-2 fragment">
-              <pre style="font-size: 0.4em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
+              <pre style="font-size: 0.38em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
                         type Cat struct {
                           Name string
                         }
@@ -785,7 +779,7 @@
             </div>
             <div class="col-span-4 fragment">
               <span style="font-size: 70%">Map JSON auf Struct</span>
-              <pre style="font-size: 0.38em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
+              <pre style="font-size: 0.37em; overflow: hidden; margin-left: 0;"><code data-trim data-noescape class="go">  
                         type Cat struct {
                           ID    string `json:"id"`
                           Name  string `json:"name"`
@@ -879,7 +873,7 @@
         </section>
         <section>
           <h2><span style="color: white;">λ</span> Lambda Function </h2>
-          <pre style="font-size: 0.43em;" class="fragment"><code data-trim data-noescape data-line-numbers="1-2|4-5|7-18|" class="bash">  
+          <pre style="font-size: 0.44em; overflow: hidden;" class="fragment"><code style="overflow: hidden;" data-trim data-noescape data-line-numbers="1-2|4-5|7-18|" class="bash">  
             // 1. Lambda Go Projekt aufsetzen
             > sam init
 
@@ -889,11 +883,11 @@
             // 3. Lambda ausführen
             > sam local invoke -e events/event.json
             Invoking bootstrap (provided.al2023)                                                                             
-            Local image is up-to-date                                                                                                     
-            Using local image: public.ecr.aws/lambda/provided:al2023-rapid-x86_64.                                                        
-                                                                                                                                          
-            Mounting .aws-sam/build/HelloWorldFunction, inside runtime container                                                                              
-            REPORT RequestId: 37876f36  Init Duration: 0.52 ms  Duration: 80.04 ms      #
+            Local image is up-to-date
+            Using local image: public.ecr.aws/lambda/provided:al2023-rapid-x86_64.
+            
+            Mounting .aws-sam/build/HelloWorldFunction, inside runtime container
+            REPORT RequestId: 37876f36  Init Duration: 0.52 ms  Duration: 80.04 ms
             Billed Duration: 81 ms  Memory Size: 128 MB   Max Memory Used: 128 MB
             {"statusCode": 200, "body": "Hello JAX!"}
            </code></pre>
@@ -922,7 +916,7 @@
         </section>
         <section>
           <h2><span style="color: white;">λ</span> Lambda Function </h2>
-          <pre style="font-size: 0.375em;" class="fragment"><code data-trim data-noescape data-line-numbers="14-16|7-12|" class="go">  
+          <pre style="font-size: 0.375em;" class="fragment"><code  style="overflow: hidden;" data-trim data-noescape data-line-numbers="14-16|7-12|" class="go">  
             import (
               "fmt"
               "github.com/aws/aws-lambda-go/events"
