@@ -437,6 +437,21 @@
           </code></pre>
         </section>
         <section>
+          <h2>File Downloader <span style="font-size: 50%;">3/3 mit Fehlern</span></h2>
+          <pre style="font-size: 45.3%;" class="fragment"><code data-trim style="overflow: hidden;" data-noescape data-line-numbers="1,10|2-6|" class="go">
+            func downloadURL(ctx context.Context, url string) error {
+              // 1. HTTP Request mit Context erstellen
+              req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+              if err != nil {
+                return err
+              }
+  
+              // 2. HTTP Aufruf durchführen
+              // ...
+            }          
+          </code></pre>
+        </section>
+        <section>
           <h2>File Downloader <span style="font-size: 50%;">mit Timeout</span></h2>
           <pre class="fragment" style="font-size: 53%;"><code data-trim data-noescape data-line-numbers="7-8,18-19|10-16|7-19" class="go">
             func main() {
