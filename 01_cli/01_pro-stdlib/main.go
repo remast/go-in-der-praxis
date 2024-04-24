@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/jboursiquot/go-proverbs"
 )
