@@ -8,15 +8,15 @@ import (
 )
 
 func main() {
-	// 1a. Flags definieren
+	// 1. Flags definieren
 	count := flag.Int("count", 1, "proverb count")
 
-	// 1b. Flags parsen
+	// 2. Flags parsen
 	flag.Parse()
 
-	// 2. Ausgabe in Schleife
+	// 3. Ausgabe in Schleife
 	for range *count {
-		var p *proverbs.Proverb = proverbs.Random()
+		p := proverbs.Random()
 		fmt.Println(p.Saying)
 	}
 }

@@ -313,13 +313,13 @@
                         )
                         
                         func main() {
-                            // 1a. Flags definieren
+                            // 1. Flags definieren
                             var count *int = flag.Int("count", 1, "proverb count")
                         
-                            // 1b. Flags parsen
+                            // 2. Flags parsen
                             flag.Parse()
                         
-                            // 2. Ausgabe in Schleife
+                            // 3. Ausgabe in Schleife
                             for i := 0; i < *count; i++ {
                                 var p *proverbs.Proverb = proverbs.Random()
                                 fmt.Println(p.Saying)
@@ -333,6 +333,18 @@
                     </code></pre>
         </section>
         <section>
+          <h2>CLI Proverbs <small>mit ungültigem Count</small></h2>
+          <pre><code data-trim data-noescape class="bash">
+                        > pro -count=
+                    </code></pre>
+          <pre class="fragment"><code data-trim data-noescape class="bash">
+            flag needs an argument: -count
+            Usage of ./pro:
+              -count int
+                    proverb count (default 1)
+           </code></pre>
+        </section>        
+        <section>
           <h2>Flag für Count <small>Refactored</small></h2>
           <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9,16|15,18|">
                     import (
@@ -342,13 +354,13 @@
                     )
                     
                     func main() {
-                        // 1a. Flags definieren
+                        // 1. Flags definieren
                         count := flag.Int("count", 1, "proverb count")
                     
-                        // 1b. Flags parsen
+                        // 2. Flags parsen
                         flag.Parse()
                     
-                        // 2. Ausgabe in Schleife
+                        // 3. Ausgabe in Schleife
                         for range *count {
                             p := proverbs.Random()
                             fmt.Println(p.Saying)
