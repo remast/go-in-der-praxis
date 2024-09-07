@@ -80,12 +80,13 @@ func main() {
 	router := http.NewServeMux()
 
 	// 2. Handler registrieren
-	router.HandleFunc("/", helloHandler)
 	router.HandleFunc("GET /api", getHandler)
 	router.HandleFunc("POST /api", postHandler)
 	router.HandleFunc("GET /api/{id}", getByIdHandler)
 	router.HandleFunc("PUT /api/{id}", putHandler)
 	router.HandleFunc("DELETE /api/{id}", deleteHandler)
+
+	router.HandleFunc("/", helloHandler)
 
 	// 3. Server mit Router starten
 	http.ListenAndServe(":8080", router)
