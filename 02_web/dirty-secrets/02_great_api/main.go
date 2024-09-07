@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	_ "crossnative.com/dirty-secrets/docs"
+	"github.com/go-chi/chi/v5"
+	"github.com/openapi-ui/go-openapi-ui/pkg/doc"
 )
 
 var repository DirtySecretRepository = NewDirtySecretRepository()
@@ -12,6 +16,17 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello Dirty Secrets!")
 }
 
+// ListAccounts lists all existing accounts
+//
+//	@Summary		List dirty secrets
+//	@Description	Get's all known dirty secrets
+//	@Tags			dirty-secrets
+//	@Accept			json
+//	@Produce		json
+//	@Param			q	query		string	false	"name search by q"	Format(email)
+//	@Success		200	{array}		DirtySecret
+//	@Failure		404	{object}	string
+//	@Router			/api/dirty-secrets [get]
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Fehler speichern
 	err := json.NewEncoder(w).Encode(repository.GetAll())
@@ -75,16 +90,40 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(savedSecret)
 }
 
+//	@title			Dirty Secrets API
+//	@version		1.0
+//	@description	Keeps track of dirty secrets
+
+//	@contact.name	Jan Stamer
+//	@contact.url	https://www.crossnative.com
+
+// @tag.name dirty-secrets
+// @tag.description Dirty Secrets
+
+// @host		localhost:8080
+// @BasePath	/api
 func main() {
 	// 1. Router erzeugen
-	router := http.NewServeMux()
+	router := chi.NewRouter()
 
 	// 2. Handler registrieren
-	router.HandleFunc("GET /api", getHandler)
-	router.HandleFunc("POST /api", postHandler)
-	router.HandleFunc("GET /api/{id}", getByIdHandler)
-	router.HandleFunc("PUT /api/{id}", putHandler)
-	router.HandleFunc("DELETE /api/{id}", deleteHandler)
+	router.HandleFunc("GET /api/dirty-secrets", getHandler)
+	router.HandleFunc("POST /api/dirty-secrets", postHandler)
+	router.HandleFunc("GET /api/dirty-secrets/{id}", getByIdHandler)
+	router.HandleFunc("PUT /api/dirty-secrets/{id}", putHandler)
+	router.HandleFunc("DELETE /api/dirty-secrets/{id}", deleteHandler)
+
+	// UI mit API Dokumentation
+
+	doc := doc.Doc{
+		Title:       "Dirty Secrets API",
+		Description: "Dirts Secrets API Description",
+		SpecFile:    "./docs/swagger.yaml",
+		SpecPath:    "/openapi/openapi.yaml",
+		DocsPath:    "/openapi/docs",
+		Theme:       "dark",
+	}
+	router.Handle("GET /openapi/*", doc.Handler())
 
 	router.HandleFunc("/", helloHandler)
 

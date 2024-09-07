@@ -1,3 +1,7 @@
+# Grandiose REST APIs mit Go
+
+http://localhost:8080/openapi/docs
+
 listing 1
 ```go
 package main
