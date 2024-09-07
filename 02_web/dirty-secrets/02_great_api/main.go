@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	_ "crossnative.com/dirty-secrets/docs"
-	"github.com/go-chi/chi/v5"
 	"github.com/openapi-ui/go-openapi-ui/pkg/doc"
 )
 
@@ -104,7 +103,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 // @BasePath	/api
 func main() {
 	// 1. Router erzeugen
-	router := chi.NewRouter()
+	router := http.NewServeMux()
 
 	// 2. Handler registrieren
 	router.HandleFunc("GET /api/dirty-secrets", getHandler)
@@ -119,11 +118,13 @@ func main() {
 		Title:       "Dirty Secrets API",
 		Description: "Dirts Secrets API Description",
 		SpecFile:    "./docs/swagger.yaml",
-		SpecPath:    "/openapi/openapi.yaml",
+		SpecPath:    "/openapi/swagger.yaml",
 		DocsPath:    "/openapi/docs",
 		Theme:       "dark",
 	}
-	router.Handle("GET /openapi/*", doc.Handler())
+	h := doc.Handler()
+	router.Handle("GET /openapi/docs", h)
+	router.Handle("GET /openapi/swagger.yaml", doc.Handler())
 
 	router.HandleFunc("/", helloHandler)
 
