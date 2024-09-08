@@ -3,11 +3,23 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"time"
 
 	_ "crossnative.com/dirty-secrets/docs"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/justinas/alice"
 	"github.com/openapi-ui/go-openapi-ui/pkg/doc"
+	"schneider.vip/problem"
 )
+
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%v requested URL %v", r.Host, r.URL)
+		next.ServeHTTP(w, r)
+	})
+}
 
 var repository DirtySecretRepository = NewDirtySecretRepository()
 
@@ -15,17 +27,12 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello Dirty Secrets!")
 }
 
-// ListAccounts lists all existing accounts
-//
-//	@Summary		List dirty secrets
-//	@Description	Get's all known dirty secrets
-//	@Tags			dirty-secrets
-//	@Accept			json
-//	@Produce		json
-//	@Param			q	query		string	false	"name search by q"	Format(email)
-//	@Success		200	{array}		DirtySecret
-//	@Failure		404	{object}	string
-//	@Router			/api/dirty-secrets [get]
+// @Summary		List dirty secrets
+// @Description	Get's all known dirty secrets
+// @Tags			dirty-secrets
+// @Produce		json
+// @Success		200	{array}	DirtySecret
+// @Router			/api/dirty-secrets [get]
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Fehler speichern
 	err := json.NewEncoder(w).Encode(repository.GetAll())
@@ -42,9 +49,12 @@ func getByIdHandler(w http.ResponseWriter, req *http.Request) {
 	id := req.PathValue("id")
 
 	// 2. Prüfen ob Secret vorhanden
-	if repository.ExistsById(id) {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Secret not found.")
+	if !repository.ExistsById(id) {
+		problem.New(
+			problem.Status(404),
+			problem.Detail("Secret not found."),
+			problem.Custom("id", id),
+		).WriteTo(w)
 		return
 	}
 
@@ -96,8 +106,8 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 //	@contact.name	Jan Stamer
 //	@contact.url	https://www.crossnative.com
 
-// @tag.name dirty-secrets
-// @tag.description Dirty Secrets
+//	@tag.name			dirty-secrets
+//	@tag.description	Dirty Secrets
 
 // @host		localhost:8080
 // @BasePath	/api
@@ -113,21 +123,24 @@ func main() {
 	router.HandleFunc("DELETE /api/dirty-secrets/{id}", deleteHandler)
 
 	// UI mit API Dokumentation
-
 	doc := doc.Doc{
 		Title:       "Dirty Secrets API",
 		Description: "Dirts Secrets API Description",
 		SpecFile:    "./docs/swagger.yaml",
 		SpecPath:    "/openapi/swagger.yaml",
 		DocsPath:    "/openapi/docs",
-		Theme:       "dark",
 	}
-	h := doc.Handler()
-	router.Handle("GET /openapi/docs", h)
-	router.Handle("GET /openapi/swagger.yaml", doc.Handler())
+	docHandler := doc.Handler()
+	router.Handle("GET /openapi/docs", docHandler)
+	router.Handle("GET /openapi/swagger.yaml", docHandler)
 
 	router.HandleFunc("/", helloHandler)
 
 	// 3. Server mit Router starten
-	http.ListenAndServe(":8080", router)
+	middlewares := alice.New(
+		middleware.Logger,
+		middleware.Recoverer,
+		middleware.Timeout(30*time.Second),
+	)
+	http.ListenAndServe(":8080", middlewares.Then(router))
 }

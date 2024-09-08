@@ -6,9 +6,9 @@ import (
 )
 
 type DirtySecret struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Secret string `json:"secret"`
+	ID     string `json:"id" minLength:"4" maxLength:"10" example:"id-123"`
+	Name   string `json:"name" validate:"required" example:"Frank"`
+	Secret string `json:"secret" validate:"required" example:"Has alcohol problems."`
 }
 
 type DirtySecretRepository struct {

@@ -12,7 +12,7 @@ func main() {
 	apiServer := NewServer()
 	apiHandler := HandlerFromMux(apiServer, router)
 
-	// 3. HTTP-Server erzengen
+	// 3. HTTP-Server erzeugen
 	httpServer := &http.Server{
 		Handler: apiHandler,
 		Addr:    "0.0.0.0:8080",

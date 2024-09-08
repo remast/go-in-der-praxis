@@ -21,9 +21,6 @@ const docTemplate = `{
         "/api/dirty-secrets": {
             "get": {
                 "description": "Get's all known dirty secrets",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -31,15 +28,6 @@ const docTemplate = `{
                     "dirty-secrets"
                 ],
                 "summary": "List dirty secrets",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "email",
-                        "description": "name search by q",
-                        "name": "q",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -49,12 +37,6 @@ const docTemplate = `{
                                 "$ref": "#/definitions/main.DirtySecret"
                             }
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             }
@@ -63,15 +45,24 @@ const docTemplate = `{
     "definitions": {
         "main.DirtySecret": {
             "type": "object",
+            "required": [
+                "name",
+                "secret"
+            ],
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 4,
+                    "example": "id-123"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Frank"
                 },
                 "secret": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Has alcohol problems."
                 }
             }
         }

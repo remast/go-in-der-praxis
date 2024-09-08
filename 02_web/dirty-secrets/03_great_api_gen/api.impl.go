@@ -16,8 +16,6 @@ func NewServer() Server {
 	return Server{}
 }
 
-// (GET /ping)
 func (Server) GetApiDirtySecrets(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(repository.GetAll())
 }

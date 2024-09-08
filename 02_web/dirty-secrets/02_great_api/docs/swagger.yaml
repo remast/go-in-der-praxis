@@ -3,11 +3,19 @@ definitions:
   main.DirtySecret:
     properties:
       id:
+        example: id-123
+        maxLength: 10
+        minLength: 4
         type: string
       name:
+        example: Frank
         type: string
       secret:
+        example: Has alcohol problems.
         type: string
+    required:
+    - name
+    - secret
     type: object
 host: localhost:8080
 info:
@@ -20,15 +28,7 @@ info:
 paths:
   /api/dirty-secrets:
     get:
-      consumes:
-      - application/json
       description: Get's all known dirty secrets
-      parameters:
-      - description: name search by q
-        format: email
-        in: query
-        name: q
-        type: string
       produces:
       - application/json
       responses:
@@ -38,10 +38,6 @@ paths:
             items:
               $ref: '#/definitions/main.DirtySecret'
             type: array
-        "404":
-          description: Not Found
-          schema:
-            type: string
       summary: List dirty secrets
       tags:
       - dirty-secrets
