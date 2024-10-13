@@ -156,7 +156,7 @@
         <section>
           <h2>CLI Proverbs <small>ohne Argumente</small></h2>
           <pre><code data-trim data-noescape class="bash">
-                        > pro
+                        > progo-cli
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="bash">
                         Clear is better than clever.
@@ -166,7 +166,7 @@
           <h2>CLI Projekt aufsetzen</h2>
           <pre style="font-size: .5em;" class="fragment"><code data-trim data-noescape class="clean">
                         // 1. Go Modul erstellen (erzeugt go.mod)
-                        > go mod init crossnative.com/pro
+                        > go mod init crossnative.com/progo-cli
                     </code></pre>
           <pre style="font-size: .5em;" class="fragment"><code data-trim data-noescape class="go">
                         // 2. Datei main.go erstellen
@@ -175,14 +175,14 @@
                         import "fmt"
                         
                         func main() {
-                            fmt.Println("Hello Go Pro!")
+                            fmt.Println("Hello Go Proverbs!")
                         }
                     </code></pre>
                     <span class="fragment">
                       Ausführen
                       <pre style="font-size: .5em;"><code data-trim data-noescape>
                                 go build . // 1. Code kompilieren
-                                ./pro      // 2. Binary ausführen
+                                ./progo-cli      // 2. Binary ausführen
                                 </code></pre>
                     </span>
                     <pre  style="font-size: .5em;" class="fragment"><code data-trim data-noescape>
@@ -219,9 +219,9 @@
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="clean">
                         // 2. Go Modul Descriptor go.mod
-                        module crossnative.com/pro
+                        module crossnative.com/progo-cli
 
-                        go 1.22
+                        go 1.23
                         
                         require github.com/jboursiquot/go-proverbs v0.0.2
                     </code></pre>
@@ -327,7 +327,7 @@
                         }                        
                     </code></pre>
           <pre style="font-size: 45%;" class="fragment"><code data-trim data-noescape class="clean">
-                        // Compile mit `go build .`, Ausgabe mit `pro -count=2`
+                        // Compile mit `go build .`, Ausgabe mit `progo-cli -count=2`
                         Make the zero value useful.
                         Reflection is never clear.
                     </code></pre>
@@ -335,11 +335,11 @@
         <section>
           <h2>CLI Proverbs <small>mit ungültigem Count</small></h2>
           <pre><code data-trim data-noescape class="bash">
-                        > pro -count=
+                        > progo-cli -count=
                     </code></pre>
           <pre class="fragment"><code data-trim data-noescape class="bash">
             flag needs an argument: -count
-            Usage of ./pro:
+            Usage of ./progo-cli:
               -count int
                     proverb count (default 1)
            </code></pre>
