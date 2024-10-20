@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/justinas/alice v1.2.0
-	github.com/openapi-ui/go-openapi-ui v0.1.0
+	github.com/openapi-ui/go-openapi-ui v0.2.0
 	github.com/swaggo/swag v1.16.4
 	schneider.vip/problem v1.9.1
 )
