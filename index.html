@@ -415,8 +415,37 @@
           </pre>
         </section>
         <section>
-          <h2>🐍 Cobra Print Command</h2>
-          <pre style="font-size: 46%;"><code data-trim data-noescape class="go" data-line-numbers="1-6,23|6-22|">
+          <h2>🐍 Cobra Print Cmd <span style="font-size: 50%;">ohne Fehlerhandling</span></h2>
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers=1-6,16|6-15|18-23|">
+            var printCmd = &cobra.Command{
+                Use:   "print",
+                Short: "Prints some proverbs",
+                Long:  `Nifty tool that prints the Proverbs in your terminal.`,
+                Args:  cobra.MatchAll(cobra.MaximumNArgs(2), cobra.OnlyValidArgs),
+                Run: func(cmd *cobra.Command, args []string) {
+                  // 1. count Flag abfragen
+                  count, _ := cmd.Flags().GetInt("count")
+              
+                  // 2. Ausgabe in Schleife
+                  for range count {
+                    p := proverbs.Random()
+                    fmt.Println(p.Saying)
+                  }
+                },
+              }           
+
+            func init() {
+              rootCmd.AddCommand(printCmd)
+              
+              // Flags
+              printCmd.Flags().IntP("count", "c", 1, "Count of proverbs to print.")
+            }
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2>🐍 Cobra Print Cmd <span style="font-size: 50%;">mit Fehlerhandling</span></h2>
+          <pre style="font-size: 46%;"><code data-trim data-noescape class="go" data-line-numbers="6,23|7-12|7-12,20-21|">
             var printCmd = &cobra.Command{
                 Use:   "print",
                 Short: "Prints some proverbs",
@@ -445,7 +474,7 @@
         </section>
         <section>
           <h2 class="cross-yellow">CLI Release bauen</h2>
-          <img src="./themes/goreleaser.png" class="align-middle" />
+          <img class="fragment" src="./themes/goreleaser.png" class="align-middle" />
           <div class="fragment box-content rounded p-6 border-4 transform -rotate-12 text-black"
           style="position: relative; top: -350px; background-color: rgb(178, 178, 178); color: black;">
           👷 Goreleaser + Github Action Demo
@@ -649,7 +678,7 @@
                   </code></pre>
         </section>
         <section>
-          <h2></h2>
+          <h2>Cat Web <span style="font-size: 50%;">mit HTML</span></h2>
           <img src="themes/cats_app_web.png" />
         </section>
         <section>
@@ -765,7 +794,7 @@
                       // 2. Handler registrieren
                       router.HandleFunc("/", indexHandler)
         
-                      // 3. Server mit Mulitplexer starten
+                      // 3. Server mit Router starten
                       http.ListenAndServe(":8080", router)
                     }
                   </code></pre>
@@ -973,7 +1002,7 @@
           <h2>Dockerfile für Cat API</h2>
           <pre class="fragment" style="font-size: .51em;"><code data-trim data-noescape class="bash" data-trim data-noescape data-line-numbers="1-5|7-11|">
           # 1. App Builder
-          FROM golang as builder
+          FROM golang AS builder
           WORKDIR /app
           ADD . /app
           RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o build/cats .
