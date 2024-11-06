@@ -305,7 +305,7 @@
         </section>
         <section>
           <h2>Flag für Count</h2>
-          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="2,8-9|11-12|14-18|">
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="2,8-10|12-13|15-19|">
                         import (
                             "flag"
                             "fmt"
@@ -314,13 +314,14 @@
                         
                         func main() {
                             // 1. Flags definieren
-                            var count *int = flag.Int("count", 1, "proverb count")
+                            var count int
+                            flag.IntVar(&count, "count", 1, "proverb count")
                         
                             // 2. Flags parsen
                             flag.Parse()
                         
                             // 3. Ausgabe in Schleife
-                            for i := 0; i < *count; i++ {
+                            for i := 0; i < count; i++ {
                                 var p *proverbs.Proverb = proverbs.Random()
                                 fmt.Println(p.Saying)
                             }                        
@@ -346,7 +347,7 @@
         </section>        
         <section>
           <h2>Flag für Count <small>Refactored</small></h2>
-          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9,16|15,18|">
+          <pre style="font-size: 45%;"><code data-trim data-noescape class="go" data-line-numbers="9-10,16|15-16,19|17|">
                     import (
                         "flag"
                         "fmt"
@@ -355,13 +356,14 @@
                     
                     func main() {
                         // 1. Flags definieren
-                        count := flag.Int("count", 1, "proverb count")
+                        var count int
+                        flag.IntVar(&count, "count", 1, "proverb count")
                     
                         // 2. Flags parsen
                         flag.Parse()
                     
                         // 3. Ausgabe in Schleife
-                        for range *count {
+                        for range count {
                             p := proverbs.Random()
                             fmt.Println(p.Saying)
                         }                        
@@ -374,10 +376,80 @@
                 </code></pre>
         </section>
         <section>
-          TODO: Cobra
+          <h2>🐍 Cobra</h2>
+          <img src="./themes/cobra.png" class="align-middle" />
         </section>
         <section>
-          TODO: Goreleaser
+          <h2>🐍 Cobra Setup</h2>
+          <pre>
+            <code data-trim>
+              # Aufbau Cobra CLIs
+              progo-cli {command} {subcommand} {args..} {flags..}
+            </code>
+          </pre>
+          <pre class="fragment">
+            <code data-trim>
+              # Cobra CLI installieren
+              go install github.com/spf13/cobra-cli@latest
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2>🐍 Cobra Setup</h2>
+          <pre>
+            <code data-trim>
+              # Cobra Projekt aufsetzen
+              cobra-cli init
+            </code>
+          </pre>
+          <pre>
+            <code data-trim>
+              # Projektstruktur
+              ├── cmd
+              │   ├── root.go
+              │   ├── cmd1.go
+              │   ├── print.go
+              │   └── {...}.go
+              └── main.go              
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2>🐍 Cobra Print Command</h2>
+          <pre style="font-size: 46%;"><code data-trim data-noescape class="go" data-line-numbers="1-6,23|6-22|">
+            var printCmd = &cobra.Command{
+                Use:   "print",
+                Short: "Prints some proverbs",
+                Long:  `Nifty tool that prints the Proverbs in your terminal.`,
+                Args:  cobra.MatchAll(cobra.MaximumNArgs(2), cobra.OnlyValidArgs),
+                RunE: func(cmd *cobra.Command, args []string) error {
+                  // 1. count Flag abfragen
+                  count, err := cmd.Flags().GetInt("count")
+                  if err != nil {
+                    // 1a. Return mit Fehler
+                    return err
+                  }
+              
+                  // 2. Ausgabe in Schleife
+                  for range count {
+                    p := proverbs.Random()
+                    fmt.Println(p.Saying)
+                  }
+              
+                  // 3. Return ohne Fehler
+                  return nil
+                },
+              }           
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2 class="cross-yellow">CLI Release bauen</h2>
+          <img src="./themes/goreleaser.png" class="align-middle" />
+          <div class="fragment box-content rounded p-6 border-4 transform -rotate-12 text-black"
+          style="position: relative; top: -350px; background-color: rgb(178, 178, 178); color: black;">
+          👷 Goreleaser + Github Action Demo
+        </div>
         </section>
       </section>
       <!--
@@ -554,22 +626,31 @@
           <h2>🖥️ CLI Tools</h2>
           <ul>
             <li class="fragment">Standardlib Flags</li>
-            <li class="fragment">einfache Releases mit Goreleaser</li>
             <li class="fragment">Cobra CLI Lib wenn's komplexer wird</li>
+            <li class="fragment">einfache Releases mit Goreleaser</li>
             <li class="fragment">Github, Kubernetes sind Go CLIs</li>            
           </ul>
         </section>
       </section>
-      <!--
       <section>
         <section>
-          <img src="themes/cats_app_web.png" />
-        </section>
-      </section>
-        -->
-        <section>
-        <section>
           <h1>🌐 Web App Cats</h1>
+        </section>
+        <section>
+          <h2>Cat API <span style="font-size: 50%;">mit JSON</span></h2>
+          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|3-7" class="bash">
+                    # Query cat API
+                    curl -s http://localhost:8080/api/cats | jq 
+                    [
+                      {
+                        "name": "Ginger"
+                      }
+                    ]
+                  </code></pre>
+        </section>
+        <section>
+          <h2></h2>
+          <img src="themes/cats_app_web.png" />
         </section>
         <section>
           <h2>Set up Cats App</h2>
@@ -634,18 +715,6 @@
           </aside>
         </section>
         <section>
-          <h2>Cat API <span style="font-size: 50%;">mit JSON</span></h2>
-          <pre class="fragment"><code data-trim data-noescape data-line-numbers="1-2|3-7" class="bash">
-                    # Query cat API
-                    curl -s http://localhost:8080/api/cats | jq 
-                    [
-                      {
-                        "name": "Ginger"
-                      }
-                    ]
-                  </code></pre>
-        </section>
-        <section>
           <h2>Test Cat API <span style="font-size: 50%;"><code>cat_api_test.go</code></span></h2>
           <pre class="fragment" style="font-size: 0.47em; overflow: hidden; margin-left: 0; margin-right: 0;"><code data-trim data-noescape data-line-numbers="1,15|2-3|5-6|8-9|11-14|1-15" class="go">
                   func TestCatAPIHandler(t *testing.T) {
@@ -679,10 +748,10 @@
       </section>
       <section>
         <section>
-          <h1>Cats App <br /> Web</h1>
+          <h1>Web App <br /> Cats</h1>
         </section>
         <section>
-          <h2>Cats Web App</h2>
+          <h2>Web App Cats</h2>
           <pre class="fragment" style="font-size: 0.5em; overflow: hidden;"><code data-trim data-noescape data-line-numbers="7-8|10-11|13-14|" class="go">  
                     func indexHandler(w http.ResponseWriter, r *http.Request) {
                       tpl := template.Must(template.ParseFiles("index.html"))
@@ -690,14 +759,14 @@
                     }
         
                     func main() {
-                      // 1. Mulitplexer erzeugen
-                      mux := http.NewServeMux()
+                      // 1. Router erzeugen
+                      router := http.NewServeMux()
 
                       // 2. Handler registrieren
-                      mux.HandleFunc("/", indexHandler)
+                      router.HandleFunc("/", indexHandler)
         
                       // 3. Server mit Mulitplexer starten
-                      http.ListenAndServe(":8080", mux)
+                      http.ListenAndServe(":8080", router)
                     }
                   </code></pre>
           <aside class="notes">
@@ -732,13 +801,13 @@
                     var assets embed.FS
         
                     func main() {
-                      mux := http.NewServeMux()
-                      mux.HandleFunc("/", indexHandler)
+                      router := http.NewServeMux()
+                      router.HandleFunc("/", indexHandler)
         
                       // Serve Files
-                      mux.Handle("/assets/", http.FileServer(http.FS(assets)))
+                      router.Handle("/assets/", http.FileServer(http.FS(assets)))
         
-                      http.ListenAndServe(":8080", mux)
+                      http.ListenAndServe(":8080", router)
                     }
                   </code></pre>
         </section>
@@ -881,7 +950,7 @@
 
       <section>
         <section>
-          <h2>🌐 Web App</h2>
+          <h2>🌐 Web App Cats</h2>
           <ul>
             <li class="fragment">Standardlib JSON und Router</li>
             <li class="fragment">HTTP Tests</li>
@@ -901,9 +970,53 @@
           </ul>
         </section>
         <section>
-          todo: containerize
-          ?....
+          <h2>Dockerfile für Cat API</h2>
+          <pre class="fragment" style="font-size: .51em;"><code data-trim data-noescape class="bash" data-trim data-noescape data-line-numbers="1-5|7-11|">
+          # 1. App Builder
+          FROM golang as builder
+          WORKDIR /app
+          ADD . /app
+          RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o build/cats .
+          
+          # 2. App Container
+          FROM gcr.io/distroless/static
+          COPY --from=builder /app/build/cats /usr/bin/
+          EXPOSE 8080
+          ENTRYPOINT ["/usr/bin/cats"]
+        </code></pre>
+        <div class="fragment box-content rounded p-6 border-4 transform -rotate-12 text-black"
+          style="position: relative; top: -260px; background-color: rgb(178, 178, 178); color: black;">
+          🚢 Google Distroless Image <b>8,5 MB</b>
+        </div>
         </section>
+        <section>
+          <h3>Go Cat Container <br> <span style="font-size: 70%; position: relative; top: -15px;">Zahlen, Daten, Fakten</span></h3>
+          <ul>
+            <li class="fragment">schlankes Container Image <b class="cross-blue">8,5 MB</b></li>
+            <li class="fragment">Container Cold Start in <b class="cross-blue">50-60 ms</b></li>
+            <li class="fragment">Hauptspeicher <b class="cross-blue">25 MB</b></li>
+            <li class="fragment">Antwortzeit <b class="cross-blue">15 ms</b></li>
+          </ul>
+        </section>
+        <!--
+        <section>          
+          <h2 class="cross-white">Docker CatAPI mit <img src="themes/buildpacks-logo.png" style="width: 5em; display: inline;"></h2>
+          <pre class="fragment" style="font-size: .51em;"><code data-trim data-noescape class="clean" data-trim data-noescape>
+            // 1. Docker Image bauen
+            >_ pack build cat-api-cnb 
+                 --buildpack paketo-buildpacks/go  
+                 --builder paketobuildpacks/builder-jammy-tiny
+          </code></pre>
+          <pre class="fragment" style="font-size: .51em;"><code data-trim data-noescape class="clean" data-trim data-noescape>
+            // 2. Docker Image ausühren
+            >_ docker run cat-api-cnb
+          </code></pre>
+          <div class="fragment box-content rounded p-6 border-4 transform -rotate-12 text-black"
+          style="position: relative; top: -260px; background-color: rgb(178, 178, 178);">
+          🚢 Docker Image Buildpack <b>40 MB</b>
+          </div>
+        </section>
+        -->
       </section>
       <!--
       <section>
@@ -1008,30 +1121,29 @@
         <section>
           <div class="grid grid-cols-3 gap-1 text-left">
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;">🖥️ CLI Tools</h4>
-              <ul style="font-size: 95%;">
+              <h4 style="padding-bottom: 10px;">🖥️ <br> CLI Tools</h4>
+              <ul style="font-size: 80%;">
                 <li>Projekt Setup</li>
-                <li>Variablen, Schleifen</li>
-                <li>Goroutinen, Channels</li>
-                <li>Context</li>
-                <li>Structs</li>
+                <li>Flags</li>
+                <li>Cobra</li>
+                <li>Goreleaser</li>
               </ul>
             </div>
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;">🌐 Web App</h4>
-              <ul style="font-size: 95%;">
+              <h4 style="padding-bottom: 10px;">🌐 <br> Web App</h4>
+              <ul style="font-size: 80%;">
                 <li>Web Server</li>
-                <li>Slice</li>
+                <li>JSON API</li>
+                <li>HTML Template</li>
                 <li>Unit Test</li>
-                <li>JSON</li>
                 <li>Fehlerhandling</li>
               </ul>
             </div>
             <div class="fragment">
-              <h4 style="padding-bottom: 10px;"><span style="color: white;">λ</span> Lambda Func</h4>
-              <ul style="font-size: 95%;">
-                <li>AWS Setup</li>
-                <li>Serverless Experience</li>
+              <h4 style="padding-bottom: 10px;"><span style="color: white;">🚢 </span> <br> <span style=" font-size: 75%;">Container Workloads</span></h4>
+              <ul style="font-size: 80%;">
+                <li>Docker Container</li>
+                <li>Resourcen Verbrauch</li>
               </ul>
             </div>
           </div>
