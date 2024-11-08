@@ -14,10 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
     "reveal-plantuml": "^1.0.2",
     "reveal-run-in-terminal": "^1.0.5",
-    "reveal.js": "^5.0.5"
+    "reveal.js": "^5.1.0"
   },
   "devDependencies": {
     "browser-sync": "^3.0.2",
