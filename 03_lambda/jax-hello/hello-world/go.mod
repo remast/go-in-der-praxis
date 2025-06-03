@@ -1,4 +1,4 @@
-require github.com/aws/aws-lambda-go v1.48.0
+require github.com/aws/aws-lambda-go v1.49.0
 
 replace gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 
