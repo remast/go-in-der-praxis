@@ -3,7 +3,7 @@ module crossnative.com/dirty-secrets
 go 1.23
 
 require (
-	github.com/go-chi/chi/v5 v5.2.1
+	github.com/go-chi/chi/v5 v5.2.2
 	github.com/justinas/alice v1.2.0
 	github.com/openapi-ui/go-openapi-ui v0.2.0
 	github.com/swaggo/swag v1.16.4
