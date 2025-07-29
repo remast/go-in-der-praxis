@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.2
 	github.com/justinas/alice v1.2.0
 	github.com/openapi-ui/go-openapi-ui v0.2.0
-	github.com/swaggo/swag v1.16.5
+	github.com/swaggo/swag v1.16.6
 	schneider.vip/problem v1.9.1
 )
 
